@@ -1,0 +1,25 @@
+{
+  "name": "my_commands_launcher",
+  "version": "0.0.1",
+  "description": "aggreation and quick access to custom commands/scripts",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "commands",
+    "script",
+    "custom",
+    "launcher"
+  ],
+  "author": "AlexPoilrouge",
+  "license": "MIT",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "electron": "^29.3.0"
+  }
+}

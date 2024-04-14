@@ -2,7 +2,7 @@
 
 ## About
 
-A quick a dirty Electron app to launch custom scripts/commands
+A quick and dirty Electron app to launch custom scripts/commands
 
 ## Usage
 

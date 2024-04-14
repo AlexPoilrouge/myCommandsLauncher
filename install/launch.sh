@@ -1,5 +1,5 @@
 #!/bin/bash
 
-SCRIPT_DIR="$( realpath "$( dirname "$0" )" )"
+SCRIPT_DIR="$( dirname "$( realpath "$0" )" )"
 
-electron ${SCRIPT_DIR}/resources/app.asar
+electron ${SCRIPT_DIR}/resources/app.asar $@

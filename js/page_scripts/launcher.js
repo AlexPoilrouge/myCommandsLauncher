@@ -5,6 +5,10 @@ const HTMLIDNAME_BUTTON_SHUTDOWN= "shutdown"
 
 CommandsUtils.handler.ensureDataExists()
 
+/**
+ * Populate the main div element with the basic 'commands' list html layout,
+ *  then adds the necessary elements.
+ */
 function populate_cmd(){
     let render_div= document.querySelector(`div#${HTMLIDNAME_DIV_COMMANDSRENDER}`)
     render_div.innerHTML += CommandsUtils.handler.commandsHTML()
@@ -15,6 +19,11 @@ function populate_cmd(){
     })
 }
 
+/**
+ * Adds he necessary element to a specific 'command' div element
+ * 
+ * @param {Element} cmd_div - the 'command' div element to decorate
+ */
 function decorate_cmdDiv(cmd_div){
     let cmd_id= cmd_div.dataset[CommandsUtils.html.HTMLDATAATTRIBUTE_CMD_ID]
 
@@ -26,11 +35,13 @@ function decorate_cmdDiv(cmd_div){
     }
 }
 
+/**
+ * Set the page's HTML buttons
+ */
 function activate_buttons() {
     let close_btn= document.querySelector(`div#${HTMLIDNAME_DIV_BUTTONS} button#${HTMLIDNAME_BUTTON_CLOSE}`)
     let shutdown_btn= document.querySelector(`div#${HTMLIDNAME_DIV_BUTTONS} button#${HTMLIDNAME_BUTTON_SHUTDOWN}`)
 
-    console.log(`999 ${close_btn} ${JSON.stringify(close_btn)}`)
     close_btn.onclick= () => {
         CommandsUtils.ipcRendererInvoke(CommandsUtils.invokables.INVOKABLE_COMMANDCLOSE_NOTICE)
     }

@@ -15,11 +15,23 @@ const HTMLCLASSNALE_DIV_CMD_CODE    = "cmd_code"
 
 const HTMLDATAATTRIBUTE_CMD_ID      = "cmd_id"
 
+/**
+ * Handles and process the 'commands' data
+ *  from the source JSON datafile
+ *  (~/.commands.json by default)
+ */
 class CommandHandler {
+    /**
+     * @param {string} commands_JSONFile_path - the path of the 'commands' data source file.
+     *                 If none provided (undefined) will be internally set to default path
+     */
     constructor(commands_JSONFile_path= undefined){
         this.dataFilePath= commands_JSONFile_path ?? commons.COMMANDS_DEFAULT_FILE
     }
 
+    /**
+     * Updates the internal 'commands' data from the source data JSON file.
+     */
     updateData(){
         //we need to read the data from somewhere
         if(!this.dataFilePath) throw new Error('Missing or invalid commands data source.');
@@ -61,6 +73,14 @@ class CommandHandler {
         }
     }
 
+    /**
+     * Makes sure the 'commands' source data JSON file exists by
+     *  trying to create it if needed.
+     * 
+     * @param {boolean} updateData - whether or not the internal 'commands' data
+     *                  should be updated after the verification (false by defalut).
+     * @throws An Error if the data source file path isn't properly set.
+     */
     createCommandsFileIfNeeded(updateData=false){
         if(!this.dataFilePath) throw new Error('No cmd data source specified…');
 
@@ -71,21 +91,38 @@ class CommandHandler {
         if(updateData) this.updateData()
     }
 
+    /**
+     * Fetches a command's code
+     * 
+     * @param {String | int} commandId - the command's id
+     * @returns {String} - the commands's code
+     */
     getCommand(commandId){
         if(!this.commandsData) throw new Error(`Data not set`);
 
-        console.log(`commandsData:\n${JSON.stringify(this.commandsData)}`)
-
         let cmdObj= this.commandsData.find(elem => String(elem.id)===String(commandId))
-        console.log(`=> ${JSON.stringify(cmdObj)}`)
         if(!cmdObj) return undefined;
 
         return cmdObj.command
     }
 
+    /**
+     * Runs a commands's code in a new process
+     * 
+     * @param {String | int} commandId - the command's id 
+     * @param {Object} std_callbacks - provides the different callback
+     * @param {Function} std_callbacks.stdout - the callback function on stdout,
+     *                  takes a String as argument
+     * @param {Function} std_callbacks.stderr - the callback function on stderr,
+     *                  takes a String as argument
+     * @param {Function} std_callbacks.error - the callback function on a thrown Error,
+     *                  takes an Error as argument
+     * @param {Function} std_callbacks.close - the callback function on the command termination,
+     *                  takes a number as argument that represents the return code
+     */
     runCommand(commandId, std_callbacks=undefined){
         const cmd_code= this.getCommand(commandId)
-        console.log(`>>>> ${cmd_code}`)
+        
         const cmd= spawn("sh", [ "-c", cmd_code ])
 
         std_callbacks= std_callbacks ?? {}
@@ -106,6 +143,11 @@ class CommandHandler {
         })); 
     }
 
+    /**
+     * Returns the basic html layout that represents the command list.
+     * 
+     * @returns HTML code as a String
+     */
     getCommandDataBasicHTML(){
         if(!this.commandsData) throw new Error(`Data not set`);
 

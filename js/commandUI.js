@@ -17,7 +17,17 @@ const LAUNCHERWINDOW_KEY= "launcher"
 const INVOKABLE_COMMANDCLOSE_NOTICE= "command_close"
 const INVOKABLE_APPSHUTDOWN_NOTICE= "app_shutdown"
 
+/**
+ * Handles the app's UI:
+ *  'Commands' window, tray, etc.
+ */
 class CommandsUI {
+    /**
+     * @param {Object | Electron.BrowserWindowConstructorOptions} options - essentially a
+     *          Electron.BrowserWindowConstructorOptions. 'width' and 'height' are unchangable
+     *          though. Following unprovided parameters will be set to a default value:
+     *              webPreferences, frame, resizable
+     */
     constructor(options){
         this.cmdWindow_options= Object.assign({}, options)
 
@@ -53,6 +63,10 @@ class CommandsUI {
         this.addCallBack(INVOKABLE_APPSHUTDOWN_NOTICE, app.quit)
     }
 
+    /**
+     * Creates the app's 'Commands' window, if it isn't already
+     *  opened.
+     */
     createLauncherWindows(){
         if(this.windows[LAUNCHERWINDOW_KEY]){
             console.log(`"${LAUNCHERWINDOW_KEY}" window already open…`)
@@ -61,17 +75,25 @@ class CommandsUI {
 
         let win= new BrowserWindow(this.cmdWindow_options)
 
+        // loading the html
         win.loadFile(path.join(__dirname, CMDWINDOW_HTMLFILE_PATH))
 
+        // dev tools if in devmode
         if(this.devMode) win.webContents.openDevTools();
 
+        //cleanup when window is closed
         win.on('closed', (e) => {
           delete this.windows[LAUNCHERWINDOW_KEY]
         })
 
+        //register window as created
         this.windows[LAUNCHERWINDOW_KEY]= win
     }
 
+    /**
+     * Creates the app's 'Commands' window, if it isn't already
+     *  opened. Otherwise closes the already existing one.
+     */
     toggleLauncherWindows(){
         if(this.windows[LAUNCHERWINDOW_KEY]){
             this.windows[LAUNCHERWINDOW_KEY].close()
@@ -81,6 +103,9 @@ class CommandsUI {
         }
     }
 
+    /**
+     * If the app's 'Commands' window is opened, closes it.
+     */
     closeLauncherWindows() {
         if(this.windows[LAUNCHERWINDOW_KEY]){
             this.windows.launcher.close()
@@ -88,15 +113,22 @@ class CommandsUI {
         }
     }
 
+    /**
+     * Opens the 'commands' file JSON data source with external editor/application
+     */
     callCommandsFile(commandsDefaultFilePath=undefined) {
         let file= commandsDefaultFilePath ?? commons.COMMANDS_DEFAULT_FILE
         shell.openPath(file)
     }
 
+    /**
+     * Creates the app's indicator in system's tray.
+     */
     createTray(){
         const tray= new Tray(path.join(__dirname, TRAYICON_PNGFILE_PATH))
         tray.setToolTip(`commands launcher`)
 
+        // right click's context menu
         const contextMenu= Menu.buildFromTemplate([
             {label: "Commands Launcher", type: 'normal', click: () => this.createLauncherWindows()},
             {label: "___", type: 'separator'},
@@ -107,21 +139,39 @@ class CommandsUI {
 
         tray.setContextMenu(contextMenu)
 
+        // Toggles 'Commands' window when tray icon click
         tray.on('click', (event) => {
             this.toggleLauncherWindows();
         })
     }
 
+    /**
+     * Registers a clallback function for a given inovkable
+     *  (ipcHandle)
+     * 
+     * @param {String} name - the name of the inovkable (ipcHandle)
+     * @param {Function} func - the callback function (no parameter)
+     */
     addCallBack(name, func){
         this.callBacks.push({name, func})
     }
 
+    /**
+     * Runs all the callbacks for a given invokable (ipcHandle)
+     * 
+     * @param {String} name  - the name of the inovkable (ipcHandle)
+     */
     invoke(name){
         for(let cb_obj of this.callBacks){
             if(cb_obj.name===name && cb_obj.func) cb_obj.func()
         }
     }
 
+    /**
+     * Returns a list of all invokables (ipcHandle)
+     * 
+     * @returns a list of strings: string[]
+     */
     getInvokables(){
         //each only once
         return this.callBacks.map(cb_obj => cb_obj.name)
@@ -130,6 +180,11 @@ class CommandsUI {
                 })
     }
 
+    /**
+     * Registers all of the invokables (ipcHandle)
+     * 
+     * @param {IpcMain} ipc_main 
+     */
     setIpcMainHandles(ipc_main){
         let invokables= this.getInvokables()
         for(let invokable of invokables){

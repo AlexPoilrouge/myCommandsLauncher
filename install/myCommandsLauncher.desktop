@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=MyCommandsLauncher
+Comment=A quick a dirty Electron app to launch custom scripts/commands
+GenericName=Command Launcher
+Exec=/usr/bin/myCommandsLauncher
+Icon=myCommandsLauncher
+Type=Application
+Categories=Utility;
+Path=/usr/bin

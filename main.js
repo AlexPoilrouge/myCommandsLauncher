@@ -13,14 +13,16 @@ const ui= new CommandsUI({devMode: isDevMode})
 
 
 app.whenReady().then(() => {
-    ui.createTray()
-    if(showOnStart) ui.createLauncherWindows()
+  //let's create the tray, 'Commands' window if needed  
+  ui.createTray()
+  if(showOnStart) ui.createLauncherWindows()
 
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) ui.createLauncherWindows()
-    })
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) ui.createLauncherWindows()
+  })
 
-    ui.setIpcMainHandles(ipcMain)
+  //set all the necessary handles (invokables/ipcHandles)
+  ui.setIpcMainHandles(ipcMain)
 })
 
 app.on('window-all-closed', () => {

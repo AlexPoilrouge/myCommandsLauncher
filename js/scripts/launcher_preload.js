@@ -6,7 +6,8 @@ const {Invokables} = require('../commandUI')
 let commandHandler= new handler.CommandHandler()
 
 const ALLOWED_INVOKABLES= [
-    Invokables.INVOKABLE_COMMANDCLOSE_NOTICE
+    Invokables.INVOKABLE_COMMANDCLOSE_NOTICE,
+    Invokables.INVOKABLE_APPSHUTDOWN_NOTICE
 ]
 
 contextBridge.exposeInMainWorld('CommandsUtils', {

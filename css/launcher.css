@@ -119,3 +119,40 @@ div.command:hover > label.cmd_title {
 div.command:active {
 	background-color: #353535;
 }
+
+div.header {
+	display: flex;
+}
+
+div.horiz-extensor{
+	width: 100%;
+	flex-grow: 1;
+}
+
+div.header > div#buttons {
+	min-width: 144px;
+	display: flex; justify-content: flex-end;
+	text-align: center;
+}
+
+div.header > div#buttons button {
+	width: 32px; height: 32px;
+	margin: 4px;
+	border: none;
+	background: none;
+	padding: 0;
+}
+
+div.header > div#buttons button:hover {
+	cursor: pointer;
+	background-color: #474747;
+}
+
+div.header > div#buttons button:active {
+	background-color: #353535;
+}
+
+div#buttons > div {
+	display: flex;
+	align-items: center; /* Vertical alignment */
+}

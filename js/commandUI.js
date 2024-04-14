@@ -15,6 +15,7 @@ const TRAYICON_PNGFILE_PATH= "../icons/tray.png"
 const LAUNCHERWINDOW_KEY= "launcher"
 
 const INVOKABLE_COMMANDCLOSE_NOTICE= "command_close"
+const INVOKABLE_APPSHUTDOWN_NOTICE= "app_shutdown"
 
 class CommandsUI {
     constructor(options){
@@ -48,6 +49,8 @@ class CommandsUI {
                 win.close()
             }
         })
+
+        this.addCallBack(INVOKABLE_APPSHUTDOWN_NOTICE, app.quit)
     }
 
     createLauncherWindows(){
@@ -137,5 +140,8 @@ class CommandsUI {
 
 module.exports= {
     CommandsUI,
-    Invokables: { INVOKABLE_COMMANDCLOSE_NOTICE }
+    Invokables: {
+        INVOKABLE_COMMANDCLOSE_NOTICE,
+        INVOKABLE_APPSHUTDOWN_NOTICE
+    }
 }

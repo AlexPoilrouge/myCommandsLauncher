@@ -14,6 +14,8 @@ install: resources/app.asar
 	mkdir -p $(prefix)/usr/bin
 	ln -s $(prefix)/opt/myCommandsLauncher/launch.sh $(prefix)/usr/bin/myCommandsLauncher
 	install -Dm 644 install/myCommandsLauncher.desktop $(prefix)/opt/myCommandsLauncher/myCommandsLauncher.desktop
+	mkdir -p $(prefix)/usr/share/applications
+	ln -s $(prefix)/opt/myCommandsLauncher/myCommandsLauncher.desktop $(prefix)/usr/share/applications/myCommandsLauncher.desktop
 
 npm_update:
 	npm update
